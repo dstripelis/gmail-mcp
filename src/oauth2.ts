@@ -9,7 +9,8 @@ const AUTH_SCOPES = [
   'https://www.googleapis.com/auth/gmail.compose',
   'https://www.googleapis.com/auth/gmail.send',
   'https://www.googleapis.com/auth/gmail.settings.basic',
-  'https://www.googleapis.com/auth/gmail.settings.sharing'
+  'https://www.googleapis.com/auth/gmail.settings.sharing',
+  'https://www.googleapis.com/auth/calendar.readonly'
 ]
 
 const getEnvBasedCredentials = (queryConfig?: Record<string, any>) => {
