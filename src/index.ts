@@ -307,17 +307,17 @@ function createServer({ config }: { config?: Record<string, any> }) {
         const fullMessages = await Promise.all(
           listData.messages.map(async (message) => {
             if (!message.id) return null;
-            const { data: fullMessage } = await gmail.users.messages.get({
+            const { data } = await gmail.users.messages.get({
               userId: 'me',
               id: message.id,
               format: 'full',
             });
 
             // Process the payload of the full message
-            if (fullMessage.payload) {
-              fullMessage.payload = processMessagePart(fullMessage.payload);
+            if (data.payload) {
+              data.payload = processMessagePart(data.payload);
             }
-            return fullMessage;
+            return data;
           })
         );
 
