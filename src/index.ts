@@ -235,9 +235,8 @@ const constructRawMessage = async (gmail: gmail_v1.Gmail, params: NewMessage) =>
   }
 
   const message = []
+
   if (params.to?.length) message.push(`To: ${wrapTextBody(params.to.join(', '))}`)
-  if (params.cc?.length) message.push(`Cc: ${wrapTextBody(params.cc.join(', '))}`)
-  if (params.bcc?.length) message.push(`Bcc: ${wrapTextBody(params.bcc.join(', '))}`)
   if (thread) {
     message.push(...getThreadHeaders(thread).map(header => wrapTextBody(header)))
   } else if (params.subject) {
@@ -332,23 +331,18 @@ function createServer({ config }: { config?: Record<string, any> }) {
   server.tool("send_email",
     "Send an email to a specific recipient.",
     {    
-      to: z.string().describe("The email address to send the email to"),
+      to: z.array(z.string()).describe("The email address(es) to send the email to"),
       subject: z.string().describe("The subject of the email"),
       body: z.string().describe("The body of the email"),
-      //   threadId: z.string().describe("The thread ID to associate this email with"),
     },
     async (params) => {
       return gmailToolHandler(config, async (gmail: gmail_v1.Gmail) => {
+
         let raw = params.raw
         if (!raw) raw = await constructRawMessage(gmail, params)
 
         const messageSendParams: MessageSendParams = { userId: 'me', requestBody: { raw } }
-        if (params.threadId && messageSendParams.requestBody) {
-          messageSendParams.requestBody.threadId = params.threadId
-        }
-
         const { data } = await gmail.users.messages.send(messageSendParams)
-
         if (data.payload) {
           data.payload = processMessagePart(
             data.payload,
