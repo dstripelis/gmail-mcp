@@ -236,8 +236,8 @@ const constructRawMessage = async (gmail: gmail_v1.Gmail, params: NewMessage) =>
 
   const message = []
 
-  if (params.to?.length) message.push(`To: ${wrapTextBody(params.to.join(', '))}`)
-  if (params.bcc?.length) message.push(`Bcc: ${wrapTextBody(params.bcc.join(', '))}`)
+  if (params.to?.length) message.push(`To: ${params.to.join(', ')}`)
+  if (params.bcc?.length) message.push(`Bcc: ${params.bcc.join(', ')}`)
   
   if (thread) {
     message.push(...getThreadHeaders(thread).map(header => wrapTextBody(header)))

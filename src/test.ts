@@ -11,6 +11,7 @@ const jsonRpcMessage = {
     name: "send_email",
     arguments: {
       to: ["dimitris@flower.ai"],
+      bcc: ["dimstripelis@gmail.com", "daniel.nata@flower.ai"],
       subject: "Test Subject",
       body: "Test Body"
     }
