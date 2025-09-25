@@ -237,6 +237,8 @@ const constructRawMessage = async (gmail: gmail_v1.Gmail, params: NewMessage) =>
   const message = []
 
   if (params.to?.length) message.push(`To: ${wrapTextBody(params.to.join(', '))}`)
+  if (params.bcc?.length) message.push(`Bcc: ${wrapTextBody(params.bcc.join(', '))}`)
+  
   if (thread) {
     message.push(...getThreadHeaders(thread).map(header => wrapTextBody(header)))
   } else if (params.subject) {
@@ -332,6 +334,7 @@ function createServer({ config }: { config?: Record<string, any> }) {
     "Send an email to a specific recipient.",
     {    
       to: z.array(z.string()).describe("The email address(es) to send the email to"),
+      bcc: z.array(z.string()).optional().describe("The list of email addresses to send a copy (BCC) of the email"),
       subject: z.string().describe("The subject of the email"),
       body: z.string().describe("The body of the email"),
     },
